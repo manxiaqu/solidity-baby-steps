@@ -1,12 +1,14 @@
+pragma solidity ^0.4.18;
+
 contract ByteExtractor {
 
-    address creator;
+    address public creator;
 
-    function ByteExtractor() {
+    constructor() public {
         creator = msg.sender;
     }
     
-    function getByteFromByte8(bytes8 _b8, uint8 byteindex) public constant returns(byte) {
+    function getByteFromByte8(bytes8 _b8, uint8 byteindex) public view returns(byte) {
     	uint numdigits = 16;
     	uint buint = uint(_b8);
     	uint upperpowervar = 16 ** (numdigits - (byteindex*2)); 		// @i=0 upperpowervar=16**64, @i=1 upperpowervar=16**62, @i upperpowervar=16**60
@@ -67,23 +69,13 @@ contract ByteExtractor {
     
     // does this work? Doesn't seem quite right. uint256 is much larger than bytes32, why are we guaranteeing 64 digits? Me = confused
     function getDigitFromUint(uint buint, uint8 index) public constant returns(uint) {
-    	uint numdigits = 64;
-    	uint upperpowervar = 10 ** (numdigits - index); 		// @i=0 upperpowervar=10**64, @i=1 upperpowervar=10**63, @i upperpowervar=10**62
-    	uint lowerpowervar = 10 ** (numdigits - 1  -index);		// @i=0 upperpowervar=10**63, @i=1 upperpowervar=10**62, @i upperpowervar=10**61
-    	uint postheadchop = buint % upperpowervar; 				// @i=0 _b32=a1b2c3d4... postheadchop=a1b2c3d4, @i=1 postheadchop=b2c3d4, @i=2 postheadchop=c3d4
-    	uint remainder = postheadchop % lowerpowervar; 			// @i=0 remainder=b2c3d4, @i=1 remainder=c3d4, @i=2 remainder=d4
-    	uint evenedout = postheadchop - remainder; 				// @i=0 evenedout=a1000000, @i=1 remainder=b20000, @i=2 remainder=c300
-    	uint b = evenedout / lowerpowervar; 					// @i=0 b=a1, @i=1 b=b2, @i=2 b=c3
+    	uint numDigits = 64;
+    	uint upperPowerVar = 10 ** (numDigits - index); 		// @i=0 upperpowervar=10**64, @i=1 upperpowervar=10**63, @i upperpowervar=10**62
+    	uint lowerPowerVar = 10 ** (numDigits - 1  -index);		// @i=0 upperpowervar=10**63, @i=1 upperpowervar=10**62, @i upperpowervar=10**61
+    	uint postHeadChop = buint % upperPowerVar; 				// @i=0 _b32=a1b2c3d4... postheadchop=a1b2c3d4, @i=1 postheadchop=b2c3d4, @i=2 postheadchop=c3d4
+    	uint remainder = postHeadChop % lowerPowerVar; 			// @i=0 remainder=b2c3d4, @i=1 remainder=c3d4, @i=2 remainder=d4
+    	uint evenedout = postHeadChop - remainder; 				// @i=0 evenedout=a1000000, @i=1 remainder=b20000, @i=2 remainder=c300
+    	uint b = evenedout / lowerPowerVar; 					// @i=0 b=a1, @i=1 b=b2, @i=2 b=c3
     	return b;
-    }
-    
-    /**********
-     Standard kill() function to recover funds 
-     **********/
-
-    function kill() {
-        if (msg.sender == creator) {
-            suicide(creator); // kills this contract and sends remaining funds back to creator
-        }
     }
 }

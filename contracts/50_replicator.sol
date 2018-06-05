@@ -1,11 +1,11 @@
+pragma solidity ^0.4.18;
 
 contract ReplicatorB {
 
-    address creator;
-    uint blockCreatedOn;
+    address public creator;
+    uint public blockCreatedOn;
 
-    function Replicator() 
-    {
+    constructor() public {
         creator = msg.sender;
        // next = new ReplicatorA();    // Replicator B can't instantiate A because it doesn't yet know about A
        								   // At the time of this writing (Sept 2015), It's impossible to create cyclical relationships
@@ -13,56 +13,28 @@ contract ReplicatorB {
         blockCreatedOn = block.number;
     }
 	
-	function getBlockCreatedOn() constant returns (uint)
-	{
+	function getBlockCreatedOn() view returns(uint) {
 		return blockCreatedOn;
 	}
-	
-    /**********
-     Standard kill() function to recover funds 
-     **********/
-    
-    function kill()
-    { 
-        if (msg.sender == creator)
-        {
-            suicide(creator);  // kills this contract and sends remaining funds back to creator
-        }
-    }
 }
 
 contract ReplicatorA {
 
-    address creator;
-	address baddress;
+    address public creator;
+	address public badDress;
 	uint blockCreatedOn;
 
-    function Replicator() 
-    {
+    constructor() public {
         creator = msg.sender;
-        baddress = new ReplicatorB();		 // This works just fine because A already knows about B
+        badDress = new ReplicatorB();		 // This works just fine because A already knows about B
         blockCreatedOn = block.number;
     }
 
-	function getBAddress() constant returns (address)
-	{
-		return baddress;
+	function getBAddress() view returns(address) {
+		return badDress;
 	}
 	
-	function getBlockCreatedOn() constant returns (uint)
-	{
+	function getBlockCreatedOn() view returns(uint) {
 		return blockCreatedOn;
 	}
-	
-    /**********
-     Standard kill() function to recover funds 
-     **********/
-    
-    function kill()
-    { 
-        if (msg.sender == creator)
-        {
-            suicide(creator);  // kills this contract and sends remaining funds back to creator
-        }
-    }
 }

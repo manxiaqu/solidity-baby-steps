@@ -1,3 +1,5 @@
+pragma solidity ^0.4.18;
+
 /***
  *     _    _  ___  ______ _   _ _____ _   _ _____ 
  *    | |  | |/ _ \ | ___ \ \ | |_   _| \ | |  __ \
@@ -16,76 +18,53 @@
 
 contract Ping {
 
-	address pvr;
-    address creator;
-    int8 sendval = -2; // -2 == initialized, -1 == error, 0 == pong returned false. 1 == pong returned true 
+	address public pvr;
+    address public creator;
+    int8 sendVal = -2; // -2 == initialized, -1 == error, 0 == pong returned false. 1 == pong returned true
 
 	/*********
  	 Step 2: Deploy Ping, giving it the address of Pong.
  	 *********/
-    function Ping(address _pongAddress) 
-    {
+    constructor(address pongAddress) {
         creator = msg.sender; 	
-        pvr = _pongAddress;
+        pvr = pongAddress;
     }
 
 	/*********
      Step 3: Touch pong with a 3,000,000 wei "send" call and see what happens. 
      *********/
-
-	function send3MilWeiToPong() 
-	{
-		sendval = -1;  // at least we reached this function
-		bool retval = false;
-		retval = pvr.send(3000000); // send 3,000,000 wei to pong // trying to determine what exactly happens here.
-		if(retval)
-			sendval = 1; // success!
-		else 
-			sendval = 0; // failure!
+	function send3MilWeiToPong() public {
+		sendVal = -1;  // at least we reached this function
+		bool retVal = false;
+		retVal = pvr.send(3000000); // send 3,000,000 wei to pong // trying to determine what exactly happens here.
+		if(retVal) {
+			sendVal = 1; // success!
+		} else {
+			sendVal = 0; // failure!
+		}
 	}	
-  
-// -----------------------------------------------------------------------------------------------------------------	
-	
-	function getBalance() public constant returns (uint)
-	{
-		return this.balance;
+
+	function getBalance() public view returns(uint256) {
+		return address(this).balance;
 	}
 	
 
-	function getSendVal() public constant returns (int8)
-	{
-		return sendval;
+	function getSendVal() public view returns(int8) {
+		return sendVal;
+	}
+
+    function setPongAddress(address pongAddress) {
+		pvr = pongAddress;
 	}
 	
-	/*********
-     Functions to get and set pongAddress just in case
-     *********/
-    
-    function setPongAddress(address _pongAddress)
-	{
-		pvr = _pongAddress;
-	}
-	
-	function getPongAddress() constant returns (address)
-	{
+	function getPongAddress() view returns(address) {
 		return pvr;
 	}
     
     /****
 	 For double-checking this contract's address
 	 ****/
-	function getAddress() returns (address)
-	{
-		return this;
+	function getAddress() returns(address) {
+		return address(this);
 	}
-    
-    /*********
-     Standard kill() function to recover funds 
-     *********/
-    
-    function kill()
-    { 
-        if (msg.sender == creator)
-            suicide(creator);  // kills this contract and sends remaining funds back to creator
-    }
 }

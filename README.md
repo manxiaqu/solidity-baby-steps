@@ -1,2 +1,2 @@
-# solidity-baby-steps
+# Solidity Contract Examples
 Contract examples for Ethereum

@@ -1,3 +1,5 @@
+pragma solidity ^0.4.18;
+
 /***
  *     _    _  ___  ______ _   _ _____ _   _ _____ 
  *    | |  | |/ _ \ | ___ \ \ | |_   _| \ | |  __ \
@@ -16,63 +18,42 @@
 
 contract Pong {
 
-    address creator;
-    int8 constructortouches = 0;
-    int8 namelesstouches = 0;
+    address public creator;
+    int8 public constructorTouches = 0;
+    int8 public namelessTouches = 0;
     
 	/*********
  	 Step 1: Deploy Pong
  	 *********/
-    function Pong() 
-    {
-        creator = msg.sender; 
-        constructortouches = constructortouches + 1;
+    constructor() public {
+        creator = msg.sender;
+		constructorTouches = constructorTouches + 1;
     }
 	
 	/*********
 	 Step 4. Accept generic transaction (send(), hopefully)
 	 *********/	
-	function () 
-	{
-    	namelesstouches = namelesstouches + 1;
+	function () public {
+		namelessTouches = namelessTouches + 1;
     	return;
     }
-    
-// ----------------------------------------------------------------------------------------------------------------------------------------
-    	
-	function getBalance() public constant returns (uint)
-	{
+
+	function getBalance() public view returns(uint) {
 		return this.balance;
 	}
 	
     /*********
 	 touches getters
 	 *********/
-	function getConstructorTouches() public constant returns (int8)
-    {
-    	return constructortouches;
+	function getConstructorTouches() public view returns(int8) {
+    	return constructorTouches;
     } 
 	
-	function getNamelessTouches() public constant returns (int8)
-	{
-		return namelesstouches;
+	function getNamelessTouches() public view returns(int8) {
+		return namelessTouches;
 	}
-	
-	/****
-	 For double-checking this contract's address
-	 ****/
-	function getAddress() constant returns (address)
-	{
-		return this;
+
+	function getAddress() view returns (address) {
+		return address(this);
 	}
-	
-    /**********
-     Standard kill() function to recover funds 
-     **********/
-    
-    function kill()
-    { 
-        if (msg.sender == creator)
-            suicide(creator);  // kills this contract and sends remaining funds back to creator
-    }
 }

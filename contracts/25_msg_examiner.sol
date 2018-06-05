@@ -1,53 +1,53 @@
-// This is supposed to allow for examination of msgs, but it proved less than informative. 
-// I'd just skip this for now.
+pragma solidity ^0.4.18;
 
+// This is supposed to allow for examination of msgs, but it proved less than informative.
+// I'd just skip this for now.
 contract msgExaminer {
 
-    address creator;
-    address miner;
+    address public creator;
+    address public miner;
   
-    bytes contract_creation_data;
-    uint contract_creation_gas;
-    uint contract_creation_value;
-    uint contract_creation_tx_gasprice;
-    address contract_creation_tx_origin;
+    bytes public contractCreationData;
+    uint public contractCreationGas;
+    uint public contractCreationValue;
+    uint public contractCreationTxGasprice;
+    address public contractCreationTxOrigin;
 
-    function msgExaminer() public 
-    {
-        creator = msg.sender; 								// msg is a global variable
+    constructor() public {
+        creator = msg.sender;
        
         miner = 0x910561dc5921131ee5de1e9748976a4b9c8c1e80;
-        contract_creation_data = msg.data;
-        contract_creation_gas = msg.gas;
-        contract_creation_value = msg.value;  				// the endowment of this contract in wei 
-        
-        contract_creation_tx_gasprice = tx.gasprice;
-        contract_creation_tx_origin = tx.origin;
+        contractCreationData = msg.data;
+        contractCreationGas = msg.gas;
+        contractCreationValue = msg.value;  				// the endowment of this contract in wei
+
+        contractCreationTxGasprice = tx.gasprice;
+        contractCreationTxOrigin = tx.origin;
     }
 	
 	function getContractCreationData() constant returns (bytes) 		
     {										              			
-    	return contract_creation_data;
+    	return contractCreationData;
     }
 	
 	function getContractCreationGas() constant returns (uint) 	// returned 732117 for me. Must be the gas expended 
     {										              		// the creation of this contract. msg.gas should be msg.gasExpended	
-    	return contract_creation_gas;
+    	return contractCreationGas;
     }
 	
     function getContractCreationValue() constant returns (uint) // returns the original endowment of the contract
     {										              		// set at creation time with "value: <someweivalue>"	
-    	return contract_creation_value;                         // this is now the "balance" of the contract
+    	return contractCreationValue;                         // this is now the "balance" of the contract
     }
     
     function getContractCreationTxGasprice() constant returns (uint) // returned 50000000000 for me. Must be the gasprice 	
     {											     				 // the sender is willing to pay. msg.gasPrice should be msg.gasLimit
-    	return contract_creation_tx_gasprice;
+    	return contractCreationTxGasprice;
     }
     
     function getContractCreationTxOrigin() constant returns (address) // returned my coinbase address.
     {											     				  //  Not sure if a chain of transactions would return the same.
-    	return contract_creation_tx_origin;
+    	return contractCreationTxOrigin;
     }
     
     bytes msg_data_before_creator_send;
@@ -109,21 +109,7 @@ contract msgExaminer {
     	return msg_value_before_creator_send;							  
     }
     
-    function getMsgValueAfter() constant returns (uint)         
-    {						
+    function getMsgValueAfter() constant returns (uint){
     	return msg_value_after_creator_send;							  
     }
- 
- 
-    
-    /**********
-     Standard kill() function to recover funds 
-     **********/
-    
-    function kill()
-    { 
-        if (msg.sender == creator)
-            suicide(creator);  // kills this contract and sends remaining funds back to creator
-    }
-        
 }

@@ -1,25 +1,18 @@
-import "mortal";
+pragma solidity ^0.4.18;
 
-// contract Descriptor {
-    
-// 	function getDescription() constant returns (uint16[3]){	
-// 		uint16[3] somevar;
-// 		return somevar;
-// 	}
-// }
+//import "mortal";
 
-contract ArrayPasser is mortal {
+contract ArrayPasser {
 
-    address creator;
+    address public creator;
     
     /***
      * 1. Declare a 3x3 map of Tiles
      ***/
-    uint8 mapsize = 3;
-    Tile[3][3] tiles; 
+    uint8 public mapSize = 3;
+    Tile[3][3] public tiles;
 
-    struct Tile 
-    {
+    struct Tile {
         /***
          * 2. A tile is comprised of the owner, elevation and a pointer to a 
          *      contract that explains what the tile looks like
@@ -32,15 +25,12 @@ contract ArrayPasser is mortal {
      * 3. Upon construction, initialize the internal map elevations.
      *      The Descriptors start uninitialized.
      ***/
-    function ArrayPasser(uint8[9] incmap) 
-    {
+    function ArrayPasser(uint8[9] incMap) {
         creator = msg.sender;
         uint8 counter = 0;
-        for(uint8 y = 0; y < mapsize; y++)
-       	{
-           	for(uint8 x = 0; x < mapsize; x++)
-           	{
-           		tiles[x][y].elevation = incmap[counter]; 
+        for(uint8 y = 0; y < mapSize; y++) {
+           	for(uint8 x = 0; x < mapSize; x++) {
+           		tiles[x][y].elevation = incMap[counter];
            		counter = counter + 1;
            	}	
         }	
@@ -49,13 +39,10 @@ contract ArrayPasser is mortal {
     /***
      * 4. After contract mined, check the map elevations
      ***/
-    function getElevations() constant returns (uint8[3][3])
-    {
+    function getElevations() view returns(uint8[3][3]) {
         uint8[3][3] memory elevations;
-        for(uint8 y = 0; y < mapsize; y++)
-        {
-        	for(uint8 x = 0; x < mapsize; x++)
-        	{
+        for(uint8 y = 0; y < mapSize; y++) {
+        	for(uint8 x = 0; x < mapSize; x++) {
         		elevations[x][y] = tiles[x][y].elevation; 
         	}	
         }	
