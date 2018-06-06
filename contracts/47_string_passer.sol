@@ -14,7 +14,7 @@ contract Descriptor {
 
     // "pure" promise not to read or modify state
     // pure关键字代表承诺该函数不会读取或修改state
-	function getDescription() pure returns (string){
+	function getDescription() public pure returns (string){
 		return "tencharsme";
 	}
 }
@@ -43,7 +43,7 @@ contract StringPasser {
      * 3. Upon construction, initialize the internal map elevations.
      *      The Descriptors start uninitialized.
      ***/
-    function StringPasser(uint8[] incMap) {
+    constructor(uint8[] incMap) public {
         creator = msg.sender;
         uint counter = 0;
         Descriptor nothing;
@@ -59,8 +59,7 @@ contract StringPasser {
    /*** 
     * 4. get Description of a tile at x,y
     ***/ 
-    function getTileDescription(uint8 x, uint8 y)
-    {
+    function getTileDescription(uint8 x, uint8 y) public view {
     	Descriptor desc = tiles[x][y].descriptor;       // get the descriptor for this tile
     	string memory anotherVar = desc.getDescription();  // get the description from the descriptor
     	
