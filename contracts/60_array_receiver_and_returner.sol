@@ -28,15 +28,15 @@ contract ArrayRR {
     	return true;
     }
     
-    function getArraySettingResult() constant returns(int8) {
+    function getArraySettingResult() public view returns(int8) {
     	return setArraySuccessful;
     }
     
-    function getArray() constant returns(uint8[10]) {
+    function getArray() public view returns(uint8[10]) {
     	return integers;
     }
     
-    function getValue(uint8 x) constant returns(uint8) {
+    function getValue(uint8 x) public view returns(uint8) {
     	return integers[x];
     }
 }

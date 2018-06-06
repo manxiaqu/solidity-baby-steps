@@ -9,7 +9,7 @@ contract Incrementer3 {
     address public creator;
     int public iteration;
     string public whatHappened;
-    int customValue;
+    int public customValue;
 
     constructor() public {
         creator = msg.sender; 								
@@ -30,15 +30,15 @@ contract Incrementer3 {
         return true;
     }
     
-    function getCustomValue() view returns(int){
+    function getCustomValue() public view returns(int){
     	return customValue;
     }
     
-    function getWhatHappened() view returns(string) {
+    function getWhatHappened() public view returns(string) {
     	return whatHappened;
     }
     
-    function getIteration() view returns(int) {
+    function getIteration() public view returns(int) {
         return iteration;
     }
 }

@@ -37,8 +37,7 @@ contract Bytes4ToByteArrayWithLength4 {
         uint powerVar = 0;
         uint bUintMinusPhat = 0; // phat = prevHead and tail
         uint numBytes = 4;
-        while(x < numBytes)
-        {
+        while(x < numBytes) {
             powerVar= (16 ** ((numBytes*2) - 2 - (x*2)));
             tail = bUint % powerVar;
             bUintMinusPhat = ((bUint - prevHead) - tail);

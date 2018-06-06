@@ -37,7 +37,7 @@ contract ContractDetector {
         return true;
     }
     
-    function getContractOrNormal() view returns(string) {
+    function getContractOrNormal() public view returns(string) {
     	return contractOrNormal;
     }
 }

@@ -1,24 +1,22 @@
-// This contract demonstrates a simple non-constant (transactional) function you can call from geth.
-// increment() takes no parameters and merely increments the "iteration" value. 
+pragma solidity ^0.4.18;
 
+// This contract demonstrates a simple non-constant (transactional) function you can call from geth.
+// increment() takes no parameters and merely increments the "iteration" value.
 contract Incrementer {
 
-    address creator;
-    uint iteration;
+    address public creator;
+    uint256 public iteration;
 
-    function Incrementer() public 
-    {
+    constructor() public {
         creator = msg.sender; 
         iteration = 0;
     }
 
-    function increment() 
-    {
+    function increment() public {
         iteration = iteration + 1;
     }
     
-    function getIteration() constant returns (uint) 
-    {
+    function getIteration() public view returns(uint256){
         return iteration;
     }
 }

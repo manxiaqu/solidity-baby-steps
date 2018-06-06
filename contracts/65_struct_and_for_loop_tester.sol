@@ -25,7 +25,7 @@ contract StructAndFor {
         }	
     }
     
-    function getElevation(uint8 x, uint8 y) view returns(uint8) {
+    function getElevation(uint8 x, uint8 y) public view returns(uint8) {
     	return tiles[x][y].elevation;
     }
 }

@@ -20,12 +20,12 @@ contract Ping {
 
 	address public pvr;
     address public creator;
-    int8 sendVal = -2; // -2 == initialized, -1 == error, 0 == pong returned false. 1 == pong returned true
+    int8 public sendVal = -2; // -2 == initialized, -1 == error, 0 == pong returned false. 1 == pong returned true
 
 	/*********
  	 Step 2: Deploy Ping, giving it the address of Pong.
  	 *********/
-    constructor(address pongAddress) {
+    constructor(address pongAddress) public {
         creator = msg.sender; 	
         pvr = pongAddress;
     }
@@ -53,18 +53,18 @@ contract Ping {
 		return sendVal;
 	}
 
-    function setPongAddress(address pongAddress) {
+    function setPongAddress(address pongAddress) public {
 		pvr = pongAddress;
 	}
 	
-	function getPongAddress() view returns(address) {
+	function getPongAddress() public view returns(address) {
 		return pvr;
 	}
     
     /****
 	 For double-checking this contract's address
 	 ****/
-	function getAddress() returns(address) {
+	function getAddress() public view returns(address) {
 		return address(this);
 	}
 }

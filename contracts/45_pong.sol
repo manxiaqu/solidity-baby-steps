@@ -60,7 +60,7 @@ contract Pong {
 	/****
 	 For double-checking this contract's address
 	 ****/
-	function getAddress() constant returns (address) {
+	function getAddress() public view returns (address) {
 		return this;
 	}
 }

@@ -13,40 +13,40 @@ contract msgExaminer {
     uint public contractCreationTxGasprice;
     address public contractCreationTxOrigin;
 
-    constructor() public {
+    constructor() public payable {
         creator = msg.sender;
        
-        miner = 0x910561dc5921131ee5de1e9748976a4b9c8c1e80;
         contractCreationData = msg.data;
-        contractCreationGas = msg.gas;
+        contractCreationGas = gasleft();
         contractCreationValue = msg.value;  				// the endowment of this contract in wei
 
         contractCreationTxGasprice = tx.gasprice;
         contractCreationTxOrigin = tx.origin;
     }
+
+    function setMiner(address newMiner) public returns(bool) {
+        require(newMiner != address(0));
+        miner = newMiner;
+        return true;
+    }
 	
-	function getContractCreationData() constant returns (bytes) 		
-    {										              			
+	function getContractCreationData() public view returns(bytes) {
     	return contractCreationData;
     }
 	
-	function getContractCreationGas() constant returns (uint) 	// returned 732117 for me. Must be the gas expended 
-    {										              		// the creation of this contract. msg.gas should be msg.gasExpended	
+	function getContractCreationGas() public view returns(uint256) {										              		// the creation of this contract. gasleft() should be gasleft()Expended
     	return contractCreationGas;
     }
 	
-    function getContractCreationValue() constant returns (uint) // returns the original endowment of the contract
-    {										              		// set at creation time with "value: <someweivalue>"	
+    function getContractCreationValue() public view returns(uint256) {										              		// set at creation time with "value: <someweivalue>"
     	return contractCreationValue;                         // this is now the "balance" of the contract
     }
     
-    function getContractCreationTxGasprice() constant returns (uint) // returned 50000000000 for me. Must be the gasprice 	
-    {											     				 // the sender is willing to pay. msg.gasPrice should be msg.gasLimit
+    function getContractCreationTxGasprice() public view returns(uint256) {											     				 // the sender is willing to pay. gasleft()Price should be gasleft()Limit
     	return contractCreationTxGasprice;
     }
     
-    function getContractCreationTxOrigin() constant returns (address) // returned my coinbase address.
-    {											     				  //  Not sure if a chain of transactions would return the same.
+    function getContractCreationTxOrigin() public view returns(address) {											     				  //  Not sure if a chain of transactions would return the same.
     	return contractCreationTxOrigin;
     }
     
@@ -57,59 +57,52 @@ contract msgExaminer {
   	uint msg_value_before_creator_send;
     uint msg_value_after_creator_send;
     
-    function sendOneEtherToMiner() returns (bool success)      	
-    {						
-    	msg_gas_before_creator_send = msg.gas;			// save msg values
+    function sendOneEtherToMiner() public payable returns (bool success) {
+    	msg_gas_before_creator_send = gasleft();			// save msg values
     	msg_data_before_creator_send = msg.data;	
     	msg_value_before_creator_send = msg.value;			  
     	bool returnval = miner.send(1000000000000000000);				// do something gassy
-    	msg_gas_after_creator_send = msg.gas;			// save them again
+    	msg_gas_after_creator_send = gasleft();			// save them again
     	msg_data_after_creator_send = msg.data;
     	msg_value_after_creator_send = msg.value;		// did anything change? Use getters below.
     	return returnval;
     }
     
-    function sendOneEtherToHome() returns (bool success)         	
-    {						
-    	msg_gas_before_creator_send = msg.gas;			// save msg values
+    function sendOneEtherToHome() public returns (bool success) {
+    	msg_gas_before_creator_send = gasleft();			// save msg values
     	msg_data_before_creator_send = msg.data;	
     	msg_value_before_creator_send = msg.value;			  
     	bool returnval = creator.send(1000000000000000000);				// do something gassy
-    	msg_gas_after_creator_send = msg.gas;			// save them again
+    	msg_gas_after_creator_send = gasleft();			// save them again
     	msg_data_after_creator_send = msg.data;
     	msg_value_after_creator_send = msg.value;		// did anything change? Use getters below.
     	return returnval;
     }
     
     
-    function getMsgDataBefore() constant returns (bytes)          
-    {						
+    function getMsgDataBefore() public view returns(bytes) {
     	return msg_data_before_creator_send;							  
     }
     
-    function getMsgDataAfter() constant returns (bytes)         
-    {						
+    function getMsgDataAfter() public view returns(bytes) {
     	return msg_data_after_creator_send;							  
     }
     
     
-    function getMsgGasBefore() constant returns (uint)          
-    {						
+    function getMsgGasBefore() public view returns(uint256) {
     	return msg_gas_before_creator_send;							  
     }
     
-    function getMsgGasAfter() constant returns (uint)         
-    {						
+    function getMsgGasAfter() public view returns(uint256) {
     	return msg_gas_after_creator_send;							  
     }
     
    
-    function getMsgValueBefore() constant returns (uint)          
-    {						
+    function getMsgValueBefore() public view returns(uint256) {
     	return msg_value_before_creator_send;							  
     }
     
-    function getMsgValueAfter() constant returns (uint){
+    function getMsgValueAfter() public view returns(uint256) {
     	return msg_value_after_creator_send;							  
     }
 }

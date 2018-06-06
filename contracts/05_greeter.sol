@@ -21,8 +21,8 @@ contract Greeter {
      */
     // view means it promises not to modify state
     // 获取greet字符串
-    // view代表该函数不会修改state
-    function greet() view returns(string) {
+    // view代表该函数承诺不会修改state
+    function greet() public view returns(string) {
         return greeting;
     }
 
@@ -39,7 +39,7 @@ contract Greeter {
      * @dev Get block properties
      */
     // 获取链全局的基本信息
-    function getBlockProperties() view returns(address, uint256, uint256, uint256, uint256) {
+    function getBlockProperties() public view returns(address, uint256, uint256, uint256, uint256) {
         return (
             block.coinbase,
             block.difficulty,
@@ -53,7 +53,7 @@ contract Greeter {
      * @dev Get transaction properties
      */
     // 返回交易的相关信息，分别为：剩余gas，交易的data字段，交易发送方，交易的签名，交易金额，当前块时间，交易原始发起方，gas价格
-    function getTxProperties() view returns(uint256, bytes, address, bytes4, uint256, uint256, address, uint256) {
+    function getTxProperties() public view returns(uint256, bytes, address, bytes4, uint256, uint256, address, uint256) {
         return (
             gasleft(),
             msg.data,
@@ -68,6 +68,7 @@ contract Greeter {
 
 
     // Can receive eth
+    // 可以收取eth
     function () public payable {}
 
 
@@ -75,11 +76,11 @@ contract Greeter {
      * @dev Destroy contract and send remaining funds back to msg.sender/creator
      */
     // 销毁当前合约，并且将合约中剩余的eth发送给创建合约的地址
-    function kill() {
+    function kill() public {
         // only allow this action if the account sending the signal is the creator
         if (msg.sender == creator) {
             // kills this contract and sends remaining funds back to creator
-            suicide(creator);
+            selfdestruct(creator);
         }
     }
 }

@@ -43,9 +43,15 @@ contract("Greeter contract", function (accounts) {
         })
     })
     
-    decribe("self destroy", function () {
+    describe("self destroy", function () {
         it("should right send eth and self destroy", async function () {
-            
+            const amount = await web3.toWei(10, "ether");
+
+            await this.GreeterIns.sendTransaction({value: amount});
+            await this.GreeterIns.kill();
+
+            const code = web3.eth.getCode(this.GreeterIns.address);
+            assert.isBelow(code.length, 10, "code will be removed after destroy");
         })
     })
 })

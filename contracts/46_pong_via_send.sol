@@ -39,7 +39,7 @@ contract Pong {
     }
 
 	function getBalance() public view returns(uint) {
-		return this.balance;
+		return address(this).balance;
 	}
 	
     /*********
@@ -53,7 +53,7 @@ contract Pong {
 		return namelessTouches;
 	}
 
-	function getAddress() view returns (address) {
+	function getAddress() public view returns (address) {
 		return address(this);
 	}
 }

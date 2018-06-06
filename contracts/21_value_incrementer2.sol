@@ -27,11 +27,11 @@ contract Incrementer2 {
         return true;
     }
     
-    function getWhatHappened() view returns(string) {
+    function getWhatHappened() public view returns(string) {
     	return whatHappened;
     }
     
-    function getIteration() view returns(int) {
+    function getIteration() public view returns(int) {
         return iteration;
     }
 }

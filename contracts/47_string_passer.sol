@@ -11,7 +11,9 @@ pragma solidity ^0.4.18;
  *   This contract DOES NOT WORK. Dynamically sized types cannot be returned (incl. "string" and "bytes").                                      
  */
 contract Descriptor {
-    
+
+    // "pure" promise not to read or modify state
+    // pure关键字代表承诺该函数不会读取或修改state
 	function getDescription() pure returns (string){
 		return "tencharsme";
 	}
